@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "611260568412",
+    "project_id": "fir-messenger-5249d",
+    "storage_bucket": "fir-messenger-5249d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611260568412:android:b242973aa03272befe6799",
+        "android_client_info": {
+          "package_name": "com.pava.chatapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611260568412-f6md79sm8gvae4322g7lr7k6srpvslli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6wbFZsFIt2hfuhRAjRIEAWZk1Sqs7bK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611260568412-f6md79sm8gvae4322g7lr7k6srpvslli.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
