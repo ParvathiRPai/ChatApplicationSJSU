@@ -46,7 +46,9 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun ListenForMessages() {
-        var ref=FirebaseDatabase.getInstance().getReference("/messages")
+        val fromId=FirebaseAuth.getInstance().uid
+        val toId=toUser?.uid
+        var ref=FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         ref.addChildEventListener(object: ChildEventListener{
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage=p0.getValue(ChatMessage::class.java)
@@ -54,7 +56,8 @@ class ChatLogActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage?.text!!)
                     if(chatMessage.fromId==FirebaseAuth.getInstance().uid)
                     {
-                        adapter.add(ChatFromItem(chatMessage.text))
+                        val currentUser=LatestMessagesActivity.currentUser
+                        adapter.add(ChatFromItem(chatMessage.text, currentUser!!))
 
                     }else{
 
@@ -88,24 +91,32 @@ class ChatLogActivity : AppCompatActivity() {
         val user=intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         val toId= user?.uid
         if(fromId==null) return
-        val reference=FirebaseDatabase.getInstance().getReference("/messages").push()
+//        val reference=FirebaseDatabase.getInstance().getReference("/messages").push()
+        val reference=FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
+        val toreference=FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
         val chatMessage= ChatMessage(reference.key!!, text, fromId!!, toId!!, System.currentTimeMillis()/1000)
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
+                edittext_chat_log.text.clear()
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount-1)
             }
+        toreference.setValue(chatMessage)
     }
 
 }
 
-class ChatFromItem(val text: String): Item<ViewHolder>(){
+class ChatFromItem(val text: String, val user: User): Item<ViewHolder>(){
     override fun getLayout(): Int {
         return R.layout.chat_from_row
 
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.textView_from.text=text
+        viewHolder.itemView.textview_from_row.text=text
+        val uri=user.profileImageUrl
+        val targetImageView=viewHolder.itemView.imageview_chat_from_row
+        Picasso.get().load(uri).into(targetImageView)
     }
 
 }
